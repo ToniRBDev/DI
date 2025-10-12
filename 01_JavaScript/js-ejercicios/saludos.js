@@ -1,0 +1,1 @@
+export default function saludar  (nombre) { return `Buenos días ${nombre}`;};
