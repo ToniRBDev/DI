@@ -6,12 +6,20 @@
 `userId = 1`. Devuelve un array de títulos en mayúsculas.
 
 ``` js
-async function getUppercaseTitlesByUser(userId = 1) {
   // 1) fetch posts
   // 2) json
   // 3) filter por userId
   // 4) map a títulos en mayúsculas
+async function getUppercaseTitlesByUser(userId = 1) {
+    const posts= await (await fetch('https://jsonplaceholder.typicode.com/posts')).json();
+        const postUser1TituloMayusculas= posts.filter(respuesta => respuesta.userId===userId)
+        .map(ru1=> ({...ru1, title: ru1.title.toUpperCase()}));
+
+console.log(postUser1TituloMayusculas);
+
 }
+getUppercaseTitlesByUser();
+
 ```
 
 ------------------------------------------------------------------------
@@ -22,11 +30,16 @@ async function getUppercaseTitlesByUser(userId = 1) {
 **precio total** de los productos con `category = 'electronics'`.
 
 ``` js
-async function totalElectronics() {
-  // GET https://fakestoreapi.com/products
-  // filter por category === 'electronics'
-  // reduce sumando price
-}
+
+    async function totalElectronics() {
+      const products = await (await fetch ('https://fakestoreapi.com/products')).json();
+      const precioTotalElectronics = products.filter(e => e.category === "electronics")
+        .map(e => e.price).reduce((acumulador, precio) => acumulador+precio,0);
+
+      console.log(precioTotalElectronics);
+      
+    }
+    totalElectronics();
 ```
 
 ------------------------------------------------------------------------
