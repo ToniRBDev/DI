@@ -51,11 +51,26 @@ una lista de objetos `{ userName, postsCount }`, ordenada
 descendentemente por `postsCount`.
 
 ``` js
-async function usersWithPostCount() {
-  // Promise.all([fetch users, fetch posts])
-  // Para cada usuario, cuenta cuántos posts tiene
-  // Devuelve [{ userName, postsCount }] ordenado por postsCount desc
+async function usersWithPostCount(){
+  const urlUsers='https://jsonplaceholder.typicode.com/users/'; 
+  const urlPosts = 'https://jsonplaceholder.typicode.com/posts/';
+
+  const [usersResponse, postsResponse] = await Promise.all(  
+    [fetch(urlUsers), fetch(urlPosts)]);       
+
+  const [users, posts] = await Promise.all(
+    [usersResponse.json(), postsResponse.json()]);  
+
+    const numeroDePostsPorUsuario = users.map(user => {cada usuario
+      const usersCount = posts.filter(post => post.userId == user.id).length; 
+      return {userId: user.id, 
+              postsCount: usersCount}
+    });
+
+    numeroDePostsPorUsuario.sort((user1, user2) => user2.postsCount - user1.postsCount);
+    console.log(numeroDePostsPorUsuario);
 }
+usersWithPostCount();
 ```
 
 ## 4) Pipeline: buscar, filtrar, normalizar, ordenar

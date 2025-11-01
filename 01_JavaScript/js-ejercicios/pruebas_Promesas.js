@@ -1,26 +1,4 @@
 
-
-/*async function usersWithPostsCount() {
-  const usersURL = 'https://jsonplaceholder.typicode.com/users';
-  const postsURL ='https://jsonplaceholder.typicode.com/posts';
-  const [users, posts] =await Promise.all([(await fetch(usersURL)).json(), fetch(postsURL).then(post => post.json())]);
-
-  const numeroPostsPorUsuario = posts.reduce((acumulador, post) => {
-        acumulador[post.userId] = (acumulador[post.userId] || 0) + 1;
-        return acumulador;
-  }, {});
-
-  console.log(numeroPostsPorUsuario);
-
-
-  
-
-  console.log(users);
-
-}
-
-usersWithPostsCount();*/
-
 async function usersWithPostCount(){
 
   const urlUsers='https://jsonplaceholder.typicode.com/users/'; 
@@ -36,7 +14,20 @@ async function usersWithPostCount(){
   // desestructuramos el array de nuevo y ya tenermos 2 arrays en formato json
   const [users, posts] = await Promise.all(
     [usersResponse.json(), postsResponse.json()]);  
+
+    const numeroDePostsPorUsuario = users.map(user => { // Obtenemos un nuevo array, por cada usuario
+      const usersCount = posts.filter(post => post.userId == user.id).length; // recorremos los posts y filtramos los posts que coincidan con el ide de ese usuario y obtenemos el tamaño de array para contarlos
+      return {userId: user.id,    //Por cada usuario, retornamos un nuevo objeto con el id del usuario y el numero de posts cuyo id de usuario coincidan en el del usuario actual
+              postsCount: usersCount}
+    });
+
+    //Ordenamos el array anterior 
+    numeroDePostsPorUsuario.sort((user1, user2) => user2.postsCount - user1.postsCount);
+
+    console.log(numeroDePostsPorUsuario);
 }
+
+usersWithPostCount();
 
 
 
