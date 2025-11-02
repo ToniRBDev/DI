@@ -80,10 +80,21 @@ contengan la palabra `'qui'` en `body`, normaliza `email` a minúsculas,
 y ordénalos por `postId` asc y después por `email` asc.
 
 ``` js
-async function cleanComments() {
-  // GET /comments
-  // filter body includes 'qui' (case-insensitive)
-  // map: email a minúsculas
-  // sort por postId, luego email
+const urlComments = "https://jsonplaceholder.typicode.com/comments";
+
+async function cleanComments () {
+  const response = await fetch(urlComments);
+  const comments = await response.json();
+
+  const filteredComments=comments.filter(comment => ((comment.body).toLowerCase().includes("qui")))
+                                 .map(comment => ({...comment, email:comment.email.toLowerCase()}));
+  //He trabajado sobre una copia de los Arrays, para no modificar el original
+  const orderedCommentsByPostIdAsc= [...filteredComments].sort((comment1, comment2)=> comment1.postId - comment2.postId); 
+  const orderedCommentsByEmailAsc= [...filteredComments].sort((comment1, comment2)=> (comment1.email.localeCompare(comment2.email)));
+  //para comparar string hay que utilizar localCompare()
+
+  console.log(orderedCommentsByPostIdAsc);
+  console.log(orderedCommentsByEmailAsc);
 }
+cleanComments();
 ```
